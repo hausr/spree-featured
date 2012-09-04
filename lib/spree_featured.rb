@@ -1,5 +1,4 @@
 require 'spree_core'
-require 'spree_featured_hooks'
 
 module SpreeFeatured
   class Engine < Rails::Engine
