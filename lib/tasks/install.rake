@@ -2,7 +2,6 @@ namespace :spree_featured do
   desc "Copies all migrations and assets (NOTE: This will be obsolete with Rails 3.1)"
   task :install do
     Rake::Task['spree_featured:install:migrations'].invoke
-    Rake::Task['spree_featured:install:assets'].invoke
   end
 
   namespace :install do
