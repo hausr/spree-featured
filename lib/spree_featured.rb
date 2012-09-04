@@ -11,26 +11,21 @@ module SpreeFeatured
       end
 
       Spree::Product.class_eval do
+        attr_accessible :featured
         scope :featured,:conditions => ['deleted_at is null and featured = ?', true]
       end
       
       Deface::Override.new(
-        :virtual_path  => "spree/admin/products/index",
-        :insert_after => '[data-hook="admin_product_form_right"]',
-        :partial          => 'admin/products/spree_featured_admin_product_fields.html',
+        :virtual_path  => "spree/admin/products/_form",
+        :insert_bottom => '[data-hook="admin_product_form_right"]',
+        :text          => "<p><%= f.label :featured, t('featured?') %> <%= f.check_box :featured %></p>",
         :name => "product_fields"
       )
       Deface::Override.new(
         :virtual_path  => "spree/admin/products/index",
-        :insert_after => '[data-hook="admin_products_index_rows"]',
-        :partial          => 'admin/products/spree_featured_admin_product_listing.html',
+        :insert_top => '[data-hook="admin_products_index_row_actions"]',
+        :text          => "<%= product.featured? ? image_tag('admin/icons/tick.png'): '' %>&nbsp;&nbsp;&nbsp;",
         :name => "product_listing"
-      )
-      Deface::Override.new(
-        :virtual_path  => "spree/admin/products/index",
-        :insert_after => '[data-hook="admin_products_index_headers"]',
-        :partial          => 'admin/products/spree_featured_admin_product_headers.html',
-        :name => "product_header"
       )
     end
 
