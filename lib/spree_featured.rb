@@ -10,23 +10,9 @@ module SpreeFeatured
         Rails.env.production? ? require(c) : load(c)
       end
 
-      Spree::Product.class_eval do
-        attr_accessible :featured
-        scope :featured,:conditions => ['deleted_at is null and featured = ?', true]
+      Dir.glob(File.join(File.dirname(__FILE__), "../app/overrides/**/*.rb")) do |c|
+        Rails.application.config.cache_classes ? require(c) : load(c)
       end
-      
-      Deface::Override.new(
-        :virtual_path  => "spree/admin/products/_form",
-        :insert_bottom => '[data-hook="admin_product_form_right"]',
-        :text          => "<p><%= f.label :featured, t('featured?') %> <%= f.check_box :featured %></p>",
-        :name => "product_fields"
-      )
-      Deface::Override.new(
-        :virtual_path  => "spree/admin/products/index",
-        :insert_top => '[data-hook="admin_products_index_row_actions"]',
-        :text          => "<%= product.featured? ? image_tag('admin/icons/tick.png'): '' %>&nbsp;&nbsp;&nbsp;",
-        :name => "product_listing"
-      )
     end
 
     config.to_prepare &method(:activate).to_proc
